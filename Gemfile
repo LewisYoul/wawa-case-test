@@ -57,6 +57,9 @@ group :development, :test do
 
   # Testing framework [https://github.com/rspec/rspec-rails]
   gem "rspec-rails"
+
+  # Adds `render_template` and `assigns` matchers to controller specs
+  # gem "rails-controller-testing"
 end
 
 group :development do

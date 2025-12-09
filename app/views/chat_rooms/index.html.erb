@@ -1,5 +1,30 @@
 <% content_for :page_title, "Chat Rooms" %>
 
-<div class="bg-white shadow rounded-lg p-6">
-  <p class="text-gray-600">Welcome to the chat rooms!</p>
-</div>
+<%= turbo_frame_tag "chat_rooms" do %>
+  <div class="space-y-6">
+    <!-- New Chat Room Form -->
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Create a New Chat Room</h2>
+      <%= form_with url: chat_rooms_path, method: :post, id: "chat_room_form", class: "flex gap-3" do |f| %>
+        <%= f.text_field 'chat_room[name]', 
+            placeholder: "Enter room name...", 
+            class: "flex-1 rounded-md border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm" %>
+        <%= f.submit "Create Room", 
+            class: "rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer" %>
+      <% end %>
+    </div>
+
+    <!-- Chat Rooms List -->
+    <!-- TODO: add empty state -->
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">Available Rooms</h2>
+      </div>
+      <div id="chat_rooms" class="divide-y divide-gray-200">
+        <% @chat_rooms.each do |chat_room| %>
+          <%= render "list_item", chat_room: chat_room %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

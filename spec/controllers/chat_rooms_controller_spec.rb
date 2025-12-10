@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe ChatRoomsController, type: :controller do
+  let(:user) { User.create!(username: "test", email_address: "test@example.com", password: "password") }
+  let(:session) { user.sessions.create!(user_agent: "Test", ip_address: "127.0.0.1") }
+
+  before do
+    cookies.signed[:session_id] = session.id
+  end
+
   describe "#create" do
-    let(:user) { User.create!(username: "test", email_address: "test@example.com", password: "password") }
-    let(:session) { user.sessions.create!(user_agent: "Test", ip_address: "127.0.0.1") }
-
-    before do
-      cookies.signed[:session_id] = session.id
-    end
-
     context "the params are valid" do
       it "creates a new chat room with the expected name" do
         expect { post(:create, params: { chat_room: { name: "Test" } }) }
@@ -36,6 +36,51 @@ RSpec.describe ChatRoomsController, type: :controller do
           .not_to change { ChatRoom.count }.from(1)
 
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
+
+  describe "#show" do
+    context "the chat room exists" do
+      it "assigns the chat room to the current user" do
+        chat_room = ChatRoom.create!(name: "Test")
+
+        post(:show, params: { id: chat_room.id })
+
+        expect(user.reload.chat_room).to eq(chat_room)
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    context "the chat room does not exist" do
+      it "redirects to the chat rooms index" do
+        post(:show, params: { id: 1 })
+
+        expect(response).to redirect_to(chat_rooms_path)
+        expect(user.reload.chat_room).to be_nil
+      end
+    end
+  end
+
+  describe "#leave" do
+    context "the chat room exists" do
+      it "removes the chat room from the current user" do
+        chat_room = ChatRoom.create!(name: "Test")
+        user.update!(chat_room: chat_room)
+
+        post(:leave, params: { id: chat_room.id })
+
+        expect(user.reload.chat_room).to be_nil
+        expect(response).to redirect_to(chat_rooms_path)
+      end
+    end
+
+    context "the chat room does not exist" do
+      it "redirects to the chat rooms index" do
+        post(:leave, params: { id: 1 })
+
+        expect(response).to redirect_to(chat_rooms_path)
+        expect(user.reload.chat_room).to be_nil
       end
     end
   end

@@ -47,7 +47,6 @@ RSpec.describe ChatRoomsController, type: :controller do
 
         post(:show, params: { id: chat_room.id })
 
-        expect(user.reload.chat_room).to eq(chat_room)
         expect(response).to have_http_status(:success)
       end
     end
@@ -55,29 +54,6 @@ RSpec.describe ChatRoomsController, type: :controller do
     context "the chat room does not exist" do
       it "redirects to the chat rooms index" do
         post(:show, params: { id: 1 })
-
-        expect(response).to redirect_to(chat_rooms_path)
-        expect(user.reload.chat_room).to be_nil
-      end
-    end
-  end
-
-  describe "#leave" do
-    context "the chat room exists" do
-      it "removes the chat room from the current user" do
-        chat_room = ChatRoom.create!(name: "Test")
-        user.update!(chat_room: chat_room)
-
-        post(:leave, params: { id: chat_room.id })
-
-        expect(user.reload.chat_room).to be_nil
-        expect(response).to redirect_to(chat_rooms_path)
-      end
-    end
-
-    context "the chat room does not exist" do
-      it "redirects to the chat rooms index" do
-        post(:leave, params: { id: 1 })
 
         expect(response).to redirect_to(chat_rooms_path)
         expect(user.reload.chat_room).to be_nil

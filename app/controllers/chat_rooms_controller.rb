@@ -29,8 +29,6 @@ class ChatRoomsController < ApplicationController
 
         return redirect_to chat_rooms_path unless @chat_room
 
-        Current.user.update!(chat_room: @chat_room)
-
         @messages = @chat_room.messages.includes(:user).order(created_at: :asc)
       end
     end

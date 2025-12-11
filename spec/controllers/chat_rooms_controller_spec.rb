@@ -15,7 +15,6 @@ RSpec.describe ChatRoomsController, type: :controller do
           .to change { ChatRoom.count }.from(0).to(1)
 
         expect(ChatRoom.last.name).to eq("Test")
-        # expect(response).to render_template(:index)
         expect(response).to have_http_status(:success)
       end
     end
@@ -25,7 +24,6 @@ RSpec.describe ChatRoomsController, type: :controller do
         expect { post(:create, params: { chat_room: { name: nil } }) }
           .not_to change { ChatRoom.count }.from(0)
 
-        # expect(response).to render_template(:index)
         expect(response).to have_http_status(:unprocessable_entity)
       end
 

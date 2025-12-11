@@ -1,5 +1,14 @@
-<h1>Chat Room: <%= @chat_room.name %></h1>
+<div class="flex justify-between items-center pb-2">
+  <h1 class="text-2xl font-bold"><%= @chat_room.name %></h1>
+</div>
 
-<%= button_to leave_chat_room_path(@chat_room) do %>
-  <span>leave</span>
-<% end %>
+<div class="bg-white w-full min-h-[calc(100vh-200px)] max-h-[calc(100vh-200px)] flex flex-col justify-between border border-gray-200">
+  <div id="messages" class="p-4 overflow-y-auto">
+    <%= render @messages %>
+  </div>
+
+  <%= form_with url: chat_room_messages_path(@chat_room), method: :post, class: "w-full flex justify-between border-t border-gray-200 p-4" do |f| %>
+    <%= f.text_field "message[content]", autofocus: true, class: 'w-full px-2 mr-2' %>
+    <%= f.submit "Send", class: "rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer" %>
+  <% end %>
+</div>

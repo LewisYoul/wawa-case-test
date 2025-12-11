@@ -7,7 +7,7 @@
     <%= render @messages %>
   </div>
 
-  <%= form_with url: chat_room_messages_path(@chat_room), method: :post, class: "w-full flex justify-between border-t border-gray-200 p-4" do |f| %>
+  <%= form_with url: chat_room_messages_path(@chat_room), method: :post, data: { controller: "form", action: 'turbo:submit-end->form#reset' }, class: "w-full flex justify-between border-t border-gray-200 p-4" do |f| %>
     <%= f.text_field "message[content]", autofocus: true, class: 'w-full px-2 mr-2' %>
     <%= f.submit "Send", class: "rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer" %>
   <% end %>

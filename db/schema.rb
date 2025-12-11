@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_10_182451) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_11_111319) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -19,6 +19,16 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_10_182451) do
     t.string "name", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_chat_rooms_on_name", unique: true
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.bigint "chat_room_id", null: false
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["chat_room_id"], name: "index_messages_on_chat_room_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -42,6 +52,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_10_182451) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "messages", "chat_rooms"
+  add_foreign_key "messages", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "users", "chat_rooms"
 end

@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_secure_password
+
   has_many :sessions, dependent: :destroy
   belongs_to :chat_room, optional: true
 

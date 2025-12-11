@@ -7,9 +7,11 @@ class MessagesController < ApplicationController
         # TODO: render a flash message
         return head :not_found unless @chat_room
 
-        begin
-          @message = @chat_room.messages.create!(message_params.merge(user: Current.user))
-        rescue ActiveRecord::RecordInvalid => e
+        params = message_params.merge(user: Current.user, chat_room: @chat_room)
+
+        result = Messages::Creator.call(params)
+
+        if !result.success?
           # TODO: render a flash message
           return head :unprocessable_entity
         end

@@ -52,3 +52,5 @@ Once a user has created an account and signed in they land on the "chat rooms" p
 * I have not deployed this application. I'd like to deploy using Kamal, I have a Hetzner VPS that's currently running a node app so I would most likely use that.
 
 * If I was to do this again I would configure the app to use a `structure.sql` file rather than a `schema.rb` file as I find it easier to understand. There is no ambiguity in what is happening at the database level when you are looking at the SQL directly, rather than a DSL that appoximates SQL.
+
+* I'm using a variety of `if x.save` and `rescue` from `save!` or `update!`. I'd pick one and stick with it.

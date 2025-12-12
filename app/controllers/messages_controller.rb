@@ -2,6 +2,7 @@ class MessagesController < ApplicationController
   def create
     respond_to do |format|
       format.turbo_stream do
+        # Potential for to_i to throw here, should probably use safe navigation operator
         @chat_room = ChatRoom.find_by(id: params[:chat_room_id].to_i)
 
         # TODO: render a flash message
